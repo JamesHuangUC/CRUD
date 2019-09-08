@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
+const methodOverride = require('method-override');
 
 // Connect db
 const db = require('./config/database.js');
@@ -22,6 +23,9 @@ app.set('view engine', 'handlebars');
 
 // body parser
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Method override
+app.use(methodOverride('_method'));
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,0 +1,24 @@
+<section class="container">
+    <h1>Single Gigs</h1>
+    {{#if gig}}
+    <div class="gig">
+        <h3>{{gig.title}}</h3>
+        <p>{{gig.description}}</p>
+        <ul>
+            <li>Budget: {{gig.budget}}</li>
+            <li><a href="mailto: {{gig.contact_email}}" class="btn btn-reverse">Apply Now</a></li>
+            <li><a href="/gigs/{{gig.id}}/edit" class="btn btn-reverse">Edit</a></li>
+            <li>
+                <form action="/gigs/{{gig.id}}?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-reverse">Remove</button>
+                </form>
+            </li>
+        </ul>
+        <div class="tech">
+            <small>Technologies Needed: <span>{{gig.technologies}}</span></small>
+        </div>
+    </div>
+    {{else}}
+    <p>No gigs available</p>
+    {{/if}}
+</section>
