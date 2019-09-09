@@ -237,6 +237,11 @@ label {
     margin-bottom: 1.2rem;
 }
 
+.pagination.text-center {
+    width: 50%;
+    margin: 50px auto;
+}
+
 /* Tablets */
 @media (max-width: 800px) {
     .container {

@@ -1,4 +1,5 @@
 const express = require('express');
+const faker = require('faker');
 const router = express.Router();
 const db = require('../config/database.js');
 const Gig = require('../models/Gig.js');
@@ -6,7 +7,14 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 function validateForm(data) {
-    let { title, technologies, budget, description, contact_email } = data;
+    let {
+        title,
+        technologies,
+        budget,
+        description,
+        contact_email,
+        cover
+    } = data;
     let errors = [];
     if (!title) {
         errors.push({ text: 'Please add a title' });
@@ -23,9 +31,24 @@ function validateForm(data) {
     return errors;
 }
 
+// Generate random data to database
+router.get('/generate', function(req, res, next) {
+    for (var i = 0; i < 10; i++) {
+        Gig.create({
+            title: faker.commerce.productName(),
+            technologies: faker.commerce.department(),
+            budget: `$${faker.commerce.price()}`,
+            description: faker.lorem.sentences(),
+            contact_email: faker.internet.email(),
+            cover: faker.image.image()
+        }).catch(err => console.log(err));
+    }
+    res.redirect('/gigs/pages/1');
+});
+
 // Display pages of gig
 router.get('/pages/:page', (req, res) => {
-    const perPage = 2;
+    const perPage = 12;
     let page = req.params.page || 1;
     let offset = (page - 1) * perPage;
     let limit = perPage;
@@ -67,7 +90,14 @@ router.get('/add', (req, res) => res.render('add'));
 
 // Create single gig
 router.post('/add', (req, res) => {
-    let { title, technologies, budget, description, contact_email } = req.body;
+    let {
+        title,
+        technologies,
+        budget,
+        description,
+        contact_email,
+        cover
+    } = req.body;
     let errors = validateForm(req.body);
 
     if (errors.length > 0) {
@@ -77,7 +107,8 @@ router.post('/add', (req, res) => {
             technologies,
             budget,
             description,
-            contact_email
+            contact_email,
+            cover
         });
     } else {
         budget = !budget ? 'Unknown' : `$${budget}`;
@@ -88,7 +119,8 @@ router.post('/add', (req, res) => {
             technologies,
             budget,
             description,
-            contact_email
+            contact_email,
+            cover
         })
             .then(gig => res.redirect('/gigs'))
             .catch(err => console.log(err));
@@ -108,7 +140,14 @@ router.get('/:id', (req, res) => {
 // Update single gig
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    let { title, technologies, budget, description, contact_email } = req.body;
+    let {
+        title,
+        technologies,
+        budget,
+        description,
+        contact_email,
+        cover
+    } = req.body;
     let errors = validateForm(req.body);
 
     if (errors.length > 0) {
@@ -120,7 +159,8 @@ router.put('/:id', (req, res) => {
                 technologies,
                 budget,
                 description,
-                contact_email
+                contact_email,
+                cover
             }
         });
     } else {
@@ -133,7 +173,8 @@ router.put('/:id', (req, res) => {
                 description,
                 budget,
                 contact_email,
-                technologies
+                technologies,
+                cover
             },
             {
                 where: { id }
