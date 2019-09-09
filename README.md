@@ -4,8 +4,8 @@ Designed an REST API which supports CRUD (Create, Read, Update, Delete) operatio
 
 ```
 {
-    frontend: [handlebars, bootstrap]
-    backend: [express, nodejs]
+    frontend: [handlebars, bootstrap],
+    backend: [express, nodejs],
     database: [postgresql, sequelize]
 }
 ```
