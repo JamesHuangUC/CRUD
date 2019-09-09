@@ -63,7 +63,7 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Landing page
-app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
+app.get('/', (req, res) => res.render('/products/pages/1', { layout: 'main' }));
 
 // Product routes
 app.use('/products', require('./routes/products.js'));
