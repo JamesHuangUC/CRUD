@@ -18,7 +18,39 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Handlebars
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+const hbs = exphbs.create({
+    defaultLayout: 'main',
+    helpers: {
+        ifequal: function(v1, v2, options) {
+            if (v1 == v2) {
+                return options.fn(this);
+            } else {
+                return options.inverse(this);
+            }
+        },
+        pagebar: function(current, pages, options) {
+            current = Number(current);
+            pages = Number(pages);
+            let out = '';
+            let i = current > 5 ? current - 4 : 1;
+            if (i !== 1) {
+                out += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+            }
+            for (; i <= current + 4 && i <= pages; i++) {
+                if (i == current) {
+                    out += `<li class="page-item active"><a class="page-link">${i}</a></li>`;
+                } else {
+                    out += `<li class="page-item"><a class="page-link" href="/gigs/pages/${i}">${i}</a></li>`;
+                }
+                if (i == current + 4 && i < pages) {
+                    out += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
+                }
+            }
+            return out;
+        }
+    }
+});
+app.engine('handlebars', exphbs(hbs));
 app.set('view engine', 'handlebars');
 
 // body parser
