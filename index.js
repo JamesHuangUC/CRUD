@@ -40,7 +40,7 @@ const hbs = exphbs.create({
                 if (i == current) {
                     out += `<li class="page-item active"><a class="page-link">${i}</a></li>`;
                 } else {
-                    out += `<li class="page-item"><a class="page-link" href="/gigs/pages/${i}">${i}</a></li>`;
+                    out += `<li class="page-item"><a class="page-link" href="/products/pages/${i}">${i}</a></li>`;
                 }
                 if (i == current + 4 && i < pages) {
                     out += `<li class="page-item disabled"><a class="page-link">...</a></li>`;
@@ -65,7 +65,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Landing page
 app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
 
-// Gig routes
-app.use('/gigs', require('./routes/gigs.js'));
+// Product routes
+app.use('/products', require('./routes/products.js'));
 
 app.listen(PORT, console.log(`App is listening on ${PORT}`));

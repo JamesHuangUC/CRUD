@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
 
-const Gig = db.define('gig', {
+const Product = db.define('products', {
     product_name: {
         type: Sequelize.STRING
     },
@@ -22,4 +22,4 @@ const Gig = db.define('gig', {
     }
 });
 
-module.exports = Gig;
+module.exports = Product;

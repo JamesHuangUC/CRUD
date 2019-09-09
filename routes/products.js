@@ -2,7 +2,7 @@ const express = require('express');
 const faker = require('faker');
 const router = express.Router();
 const db = require('../config/database.js');
-const Gig = require('../models/Gig.js');
+const Product = require('../models/Product.js');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -34,7 +34,7 @@ function validateForm(data) {
 // Generate random data to database
 router.get('/generate', function(req, res, next) {
     for (let i = 0; i < 10; i++) {
-        Gig.create({
+        Product.create({
             product_name: faker.commerce.productName(),
             category: faker.commerce.department().toLowerCase(),
             price: `$${faker.commerce.price()}`,
@@ -43,32 +43,32 @@ router.get('/generate', function(req, res, next) {
             cover: faker.image.image()
         }).catch(err => console.log(err));
     }
-    res.redirect('/gigs/pages/1');
+    res.redirect('/products/pages/1');
 });
 
 // Remove all data
 router.get('/clean', function(req, res, next) {
-    Gig.destroy({
+    Product.destroy({
         where: {},
         truncate: true /* this will ignore where and truncate the table instead */
     })
-        .then(res.redirect('/gigs/pages/1'))
+        .then(res.redirect('/products/pages/1'))
         .catch(err => console.log(err));
 });
 
-// Display pages of gig
+// Display pages of product
 router.get('/pages/:page', (req, res) => {
     const perPage = 12;
     let page = req.params.page || 1;
     let offset = (page - 1) * perPage;
     let limit = perPage;
-    return Gig.findAndCountAll({
+    return Product.findAndCountAll({
         offset,
         limit
     })
         .then(result => {
-            res.render('gigs', {
-                gigs: result.rows,
+            res.render('products', {
+                products: result.rows,
                 current: page,
                 pages: Math.ceil(result.count / perPage)
             });
@@ -76,12 +76,12 @@ router.get('/pages/:page', (req, res) => {
         .catch(err => console.log(err));
 });
 
-// Display edit gig form
+// Display edit product form
 router.get('/:id/edit', (req, res) => {
     const { id } = req.params;
-    Gig.findByPk(id).then(gig => {
+    Product.findByPk(id).then(product => {
         res.render('edit', {
-            gig
+            product
         });
     });
 });
@@ -90,15 +90,15 @@ router.get('/:id/edit', (req, res) => {
 router.get('/search', (req, res) => {
     let { term } = req.query;
     term = term.toLowerCase();
-    Gig.findAll({ where: { category: { [Op.like]: '%' + term + '%' } } })
-        .then(gigs => res.render('gigs', { gigs }))
+    Product.findAll({ where: { category: { [Op.like]: '%' + term + '%' } } })
+        .then(products => res.render('products', { products }))
         .catch(err => console.log(err));
 });
 
-// Display add gig form
+// Display add product form
 router.get('/add', (req, res) => res.render('add'));
 
-// Create single gig
+// Create single product
 router.post('/add', (req, res) => {
     let {
         product_name,
@@ -124,7 +124,7 @@ router.post('/add', (req, res) => {
         price = !price ? 'Unknown' : `$${price}`;
         category = category.toLowerCase().replace(/, /g, ',');
 
-        Gig.create({
+        Product.create({
             product_name,
             category,
             price,
@@ -132,22 +132,22 @@ router.post('/add', (req, res) => {
             contact_email,
             cover
         })
-            .then(gig => res.redirect('/gigs'))
+            .then(product => res.redirect('/products'))
             .catch(err => console.log(err));
     }
 });
 
-// Read single gigs
+// Read single products
 router.get('/:id', (req, res) => {
     const { id } = req.params;
-    Gig.findByPk(id).then(gig => {
-        res.render('gig', {
-            gig
+    Product.findByPk(id).then(product => {
+        res.render('product', {
+            product
         });
     });
 });
 
-// Update single gig
+// Update single product
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     let {
@@ -162,7 +162,7 @@ router.put('/:id', (req, res) => {
 
     if (errors.length > 0) {
         res.render('edit', {
-            gig: {
+            product: {
                 errors,
                 id,
                 product_name,
@@ -177,7 +177,7 @@ router.put('/:id', (req, res) => {
         price = !price ? 'Unknown' : `$${price}`;
         category = category.toLowerCase().replace(/, /g, ',');
 
-        Gig.update(
+        Product.update(
             {
                 product_name,
                 description,
@@ -190,22 +190,22 @@ router.put('/:id', (req, res) => {
                 where: { id }
             }
         )
-            .then(res.redirect('/gigs'))
+            .then(res.redirect('/products'))
             .catch(err => console.log(err));
     }
 });
 
-// Delete single gigs
+// Delete single products
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-    Gig.destroy({
+    Product.destroy({
         where: { id }
     })
-        .then(res.redirect('/gigs'))
+        .then(res.redirect('/products'))
         .catch(err => console.log(err));
 });
 
-// Redirect /gigs to /gigs/pages/1
-router.get('/', (req, res) => res.redirect('/gigs/pages/1'));
+// Redirect /products to /products/pages/1
+router.get('/', (req, res) => res.redirect('/products/pages/1'));
 
 module.exports = router;
