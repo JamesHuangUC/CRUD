@@ -1,38 +1,43 @@
-<div class="row">
-    {{#each gigs}}
-        <div class="col-md-4">
-            <div class="card">
-                <img src="{{cover}}" class="card-img-top img-thumbnail" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{title}}</h5>
-                    <p class="card-text text-truncate">{{description}}</p>
-                    <p class="card-text">{{budget}}</p>
-                    <a href="/gigs/{{id}}" class="stretched-link"></a>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">{{technologies}}</small>
-                </div>
+<main role="main">
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                {{#each gigs}}
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <img class="card-img-top" src="{{cover}}" alt="{{product_name}}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{product_name}}</h5>
+                                <p class="card-text text-truncate">{{description}}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/gigs/{{id}}" class="view-btn">View</a></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/gigs/{{id}}/edit" class="view-btn">Edit</a></button>
+                                    </div>
+                                    <small class="text-muted">{{price}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{else}}
+                    <p>No products available</p>
+                {{/each}}
             </div>
         </div>
-    {{else}}
-        <p>No gigs available</p>
-    {{/each}}
-</div>
-
+    </div>
+</main>
 {{#if pages}}
-<ul class="pagination text-center">
-    {{#ifequal this.current 1}}
-        <li class="page-item disabled"><a class="page-link">First</a></li>
-    {{else}}
-        <li class="page-item"><a class="page-link" href="/gigs/pages/1">First</a></li>
-    {{/ifequal}}
-
-    {{{pagebar this.current this.pages}}}
-
-    {{#ifequal this.current this.pages}}
-        <li class="page-item disabled"><a class="page-link">Last</a></li>
-    {{else}}
-        <li class="page-item"><a class="page-link" href="/gigs/pages/{{pages}}">Last</a></li>
-    {{/ifequal}}
-</ul>
+    <ul class="pagination text-center">
+        {{#ifequal this.current 1}}
+            <li class="page-item disabled"><a class="page-link">First</a></li>
+        {{else}}
+            <li class="page-item"><a class="page-link" href="/gigs/pages/1">First</a></li>
+        {{/ifequal}}
+        {{{pagebar this.current this.pages}}}
+        {{#ifequal this.current this.pages}}
+            <li class="page-item disabled"><a class="page-link">Last</a></li>
+        {{else}}
+            <li class="page-item"><a class="page-link" href="/gigs/pages/{{pages}}">Last</a></li>
+        {{/ifequal}}
+    </ul>
 {{/if}}

@@ -5,33 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/v4-shims.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
-    <title>CodeGig</title>
+    <title>Online Store</title>
 </head>
 
 <body>
-    <header class="inner">
-        <h2><a href="/"><i class="fas fa-code"></i>
-        CodeGig</a></h2>
-        <nav>
-            <ul>
-                <li>
-                    <a href="/">Home</a>
-                </li>
-                <li>
-                    <a href="/gigs">All Gigs</a>
-                </li>
-                <li>
-                    <a href="/gigs/add">Add Gig</a>
-                </li>
-            </ul>
-        </nav>
+    <header>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/gigs/pages/1" class="brand-name" >Online Store</a></h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+                <a class="p-2 text-dark" href="/gigs/add">Add</a>
+                <a class="p-2 text-dark" href="/gigs/generate">Generate</a>
+                <a class="p-2 text-dark" href="/gigs/clean">Clean</a>
+            </nav>
+            <form class="form-inline my-2 my-lg-0" action="/gigs/search">
+                <input class="form-control mr-sm-2" type="search" placeholder="&#xF002; category..." style="font-family: roboto, 'Font Awesome 5 Free'" name="term">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
     </header>
-    <div class="container">
-        {{{body}}}
-    </div>
+    {{{body}}}
 </body>
 
 </html>

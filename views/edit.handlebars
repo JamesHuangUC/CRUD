@@ -1,38 +1,38 @@
-<section id="add" class="container">
-    <div class="form-wrap">
-        <h1>Edit A Gig</h1>
-        <p>Your contact email will be shared with registered users to apply to your gig</p>
-        {{#each gig.errors}}
-        <div class="error">
-            <p>{{text}}</p>
+<div class="container">
+    <h1>Edit a Product</h1>
+    {{#each gig.errors}}
+        <div class="alert alert-warning" role="alert">
+            {{text}}
         </div>
-        {{/each}}
-        <form action="/gigs/{{gig.id}}?_method=PUT" method="POST">
-            <div class="input-group">
-                <label for="title">Gig Title</label>
-                <input type="text" name="title" id="title" class="input-box" placeholder="eg. Small Wordpress website, React developer" maxlength="100" value={{gig.title}}>
-            </div>
-            <div class="input-group">
-                <label for="technologies">Technologies Needed</label>
-                <input type="text" name="technologies" id="technologies" class="input-box" placeholder="eg. javascript, react, PHP" maxlength="100" value={{gig.technologies}}>
-            </div>
-            <div class="input-group">
-                <label for="budget">Budget (Leave blank for unknown)</label>
-                <input type="number" name="budget" id="budget" class="input-box" placeholder="eg. 500, 5000, 10000" value={{gig.budget}}>
-            </div>
-            <div class="input-group">
-                <label for="description">Gig Description</label>
-                <textarea name="description" id="description" class="input-box" placeholder="Describe the details of the gig" rows="10">{{gig.description}}</textarea>
-            </div>
-            <div class="input-group">
-                <label for="budget">Contact Email</label>
-                <input type="email" name="contact_email" id="contactemail" class="input-box" placeholder="Enter an email" value={{gig.contact_email}}>
-            </div>
-            <div class="input-group">
-                <label for="budget">Cover</label>
-                <input type="text" name="cover" id="cover" class="input-box" placeholder="https://www.example.com/image.png" value={{gig.cover}}>
-            </div>
-            <input type="submit" value="Update Gig" class="btn btn-reverse">
-        </form>
-    </div>
-</section>
+    {{/each}}
+    <form action="/gigs/{{gig.id}}?_method=PUT" method="POST">
+        <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input name="product_name" type="text" class="form-control" id="productName" placeholder="Product Name" value={{gig.product_name}}>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input name="category" type="text" class="form-control" id="category" placeholder="Category" value={{gig.category}}>
+        </div>
+        <div class="form-group">
+            <label for="price">Price (Leave blank for unknown)</label>
+            <input name="price" type="number" class="form-control" id="price" placeholder="eg. 500, 5000, 10000" value={{gig.price}}>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" class="form-control" id="description" rows="3">{{gig.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="emailAddress">Email Address</label>
+            <input name="contact_email" type="email" class="form-control" id="emailAddress" placeholder="name@example.com" value={{gig.contact_email}}>
+        </div>
+        <div class="form-group">
+            <label for="cover">Image Cover</label>
+            <input name="cover" type="text" class="form-control" id="cover" placeholder="Enter a link to an image" value={{gig.cover}}>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <form action="/gigs/{{gig.id}}?_method=DELETE" method="POST">
+        <button type="submit" class="btn btn-danger edit-remove-btn">Remove</button>
+    </form>
+</div>

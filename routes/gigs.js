@@ -8,19 +8,19 @@ const Op = Sequelize.Op;
 
 function validateForm(data) {
     let {
-        title,
-        technologies,
-        budget,
+        product_name,
+        category,
+        price,
         description,
         contact_email,
         cover
     } = data;
     let errors = [];
-    if (!title) {
-        errors.push({ text: 'Please add a title' });
+    if (!product_name) {
+        errors.push({ text: 'Please add a product name' });
     }
-    if (!technologies) {
-        errors.push({ text: 'Please add some technologies' });
+    if (!category) {
+        errors.push({ text: 'Please add some category' });
     }
     if (!description) {
         errors.push({ text: 'Please add a description' });
@@ -33,17 +33,27 @@ function validateForm(data) {
 
 // Generate random data to database
 router.get('/generate', function(req, res, next) {
-    for (var i = 0; i < 10; i++) {
+    for (let i = 0; i < 10; i++) {
         Gig.create({
-            title: faker.commerce.productName(),
-            technologies: faker.commerce.department(),
-            budget: `$${faker.commerce.price()}`,
+            product_name: faker.commerce.productName(),
+            category: faker.commerce.department().toLowerCase(),
+            price: `$${faker.commerce.price()}`,
             description: faker.lorem.sentences(),
             contact_email: faker.internet.email(),
             cover: faker.image.image()
         }).catch(err => console.log(err));
     }
     res.redirect('/gigs/pages/1');
+});
+
+// Remove all data
+router.get('/clean', function(req, res, next) {
+    Gig.destroy({
+        where: {},
+        truncate: true /* this will ignore where and truncate the table instead */
+    })
+        .then(res.redirect('/gigs/pages/1'))
+        .catch(err => console.log(err));
 });
 
 // Display pages of gig
@@ -80,7 +90,7 @@ router.get('/:id/edit', (req, res) => {
 router.get('/search', (req, res) => {
     let { term } = req.query;
     term = term.toLowerCase();
-    Gig.findAll({ where: { technologies: { [Op.like]: '%' + term + '%' } } })
+    Gig.findAll({ where: { category: { [Op.like]: '%' + term + '%' } } })
         .then(gigs => res.render('gigs', { gigs }))
         .catch(err => console.log(err));
 });
@@ -91,9 +101,9 @@ router.get('/add', (req, res) => res.render('add'));
 // Create single gig
 router.post('/add', (req, res) => {
     let {
-        title,
-        technologies,
-        budget,
+        product_name,
+        category,
+        price,
         description,
         contact_email,
         cover
@@ -103,21 +113,21 @@ router.post('/add', (req, res) => {
     if (errors.length > 0) {
         res.render('add', {
             errors,
-            title,
-            technologies,
-            budget,
+            product_name,
+            category,
+            price,
             description,
             contact_email,
             cover
         });
     } else {
-        budget = !budget ? 'Unknown' : `$${budget}`;
-        technologies = technologies.toLowerCase().replace(/, /g, ',');
+        price = !price ? 'Unknown' : `$${price}`;
+        category = category.toLowerCase().replace(/, /g, ',');
 
         Gig.create({
-            title,
-            technologies,
-            budget,
+            product_name,
+            category,
+            price,
             description,
             contact_email,
             cover
@@ -141,9 +151,9 @@ router.get('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     let {
-        title,
-        technologies,
-        budget,
+        product_name,
+        category,
+        price,
         description,
         contact_email,
         cover
@@ -155,25 +165,25 @@ router.put('/:id', (req, res) => {
             gig: {
                 errors,
                 id,
-                title,
-                technologies,
-                budget,
+                product_name,
+                category,
+                price,
                 description,
                 contact_email,
                 cover
             }
         });
     } else {
-        budget = !budget ? 'Unknown' : `$${budget}`;
-        technologies = technologies.toLowerCase().replace(/, /g, ',');
+        price = !price ? 'Unknown' : `$${price}`;
+        category = category.toLowerCase().replace(/, /g, ',');
 
         Gig.update(
             {
-                title,
+                product_name,
                 description,
-                budget,
+                price,
                 contact_email,
-                technologies,
+                category,
                 cover
             },
             {

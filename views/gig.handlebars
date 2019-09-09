@@ -1,25 +1,17 @@
-<section class="container">
-    <h1>Single Gigs</h1>
+<div class="container">
     {{#if gig}}
-    <div class="gig">
-        <h3>{{gig.title}}</h3>
-        <img src="{{gig.cover}}" class="card-img-top img-thumbnail" alt="...">
-        <p>{{gig.description}}</p>
-        <ul>
-            <li>Budget: {{gig.budget}}</li>
-            <li><a href="mailto: {{gig.contact_email}}" class="btn btn-reverse">Apply Now</a></li>
-            <li><a href="/gigs/{{gig.id}}/edit" class="btn btn-reverse">Edit</a></li>
-            <li>
-                <form action="/gigs/{{gig.id}}?_method=DELETE" method="POST">
-                    <button type="submit" class="btn btn-reverse">Remove</button>
-                </form>
-            </li>
-        </ul>
-        <div class="tech">
-            <small>Technologies Needed: <span>{{gig.technologies}}</span></small>
+        <div class="single_product">
+            <h3>{{gig.product_name}}</h3>
+            <img src="{{gig.cover}}" class="img-thumbnail rounded mx-auto d-block" alt="...">
+            <p class="lead">{{gig.description}}</p>
+            <p>Category: {{gig.category}}</p>
+            <p>Price: {{gig.price}} <a href="mailto: {{gig.contact_email}}" class="btn btn-primary buy-btn">Contact to Buy</a></p>
+            <form action="/gigs/{{gig.id}}?_method=DELETE" method="POST">
+                <a href="/gigs/{{gig.id}}/edit" class="btn btn-warning">Edit</a>
+                <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
         </div>
-    </div>
     {{else}}
-    <p>No gigs available</p>
+        <p>No products available</p>
     {{/if}}
-</section>
+</div>

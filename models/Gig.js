@@ -2,16 +2,16 @@ const Sequelize = require('sequelize');
 const db = require('../config/database.js');
 
 const Gig = db.define('gig', {
-    title: {
+    product_name: {
         type: Sequelize.STRING
     },
-    technologies: {
+    category: {
         type: Sequelize.STRING
     },
     description: {
         type: Sequelize.STRING
     },
-    budget: {
+    price: {
         type: Sequelize.STRING
     },
     contact_email: {
