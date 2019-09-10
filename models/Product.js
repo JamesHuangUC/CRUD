@@ -9,7 +9,7 @@ const Product = db.define('products', {
         type: Sequelize.STRING
     },
     description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     price: {
         type: Sequelize.STRING
@@ -20,6 +20,10 @@ const Product = db.define('products', {
     cover: {
         type: Sequelize.STRING
     }
+});
+
+db.sync({ force: true }).then(() => {
+    console.log(`Database and tables created.`);
 });
 
 module.exports = Product;
