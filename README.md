@@ -1,6 +1,6 @@
 # CRUD
 
-Designed an REST API which supports CRUD (Create, Read, Update, Delete) operations.
+Designed a REST API which supports CRUD (Create, Read, Update, Delete) operations.
 
 ```
 {
