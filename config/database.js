@@ -1,4 +1,3 @@
 const sequelize = require('sequelize');
 
-// module.exports = new sequelize(process.env.DATABASE_URL);
-module.exports = new sequelize('postgres://jameshuang1996:@localhost:5432/onlinestore');
+module.exports = new sequelize(process.env.DATABASE_URL);
