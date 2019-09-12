@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
+const { forwardAuthenticated } = require('../config/auth');
 const Product = require('../models/Product.js');
 
-// Welcome Page
+// Home page
 router.get('/', forwardAuthenticated, (req, res) => {
     const perPage = 12;
     let page = req.params.page || 1;
@@ -22,14 +22,6 @@ router.get('/', forwardAuthenticated, (req, res) => {
             });
         })
         .catch(err => console.log(err));
-});
-
-// Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => {
-    res.render('dashboard', {
-        layout: 'user',
-        user: req.user
-    });
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 <div class="container">
+    {{#ifequal product.userId user.id}}
     <h1>Edit a Product</h1>
     {{#each product.errors}}
         <div class="alert alert-warning" role="alert">
@@ -35,4 +36,7 @@
     <form action="/products/{{product.id}}?_method=DELETE" method="POST">
         <button type="submit" class="btn btn-danger edit-remove-btn">Remove</button>
     </form>
+    {{else}}
+        <p>Not authoirzed.</p>
+    {{/ifequal}}
 </div>

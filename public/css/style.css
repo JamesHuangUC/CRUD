@@ -44,3 +44,7 @@ a.brand-name:active {
     left: 80px;
     position: relative;
 }
+
+.login-form {
+    border-style: none;
+}

@@ -3,6 +3,7 @@ const faker = require('faker');
 const router = express.Router();
 const db = require('../config/database.js');
 const Product = require('../models/Product.js');
+const User = require('../models/User.js');
 const Sequelize = require('sequelize');
 
 const { ensureAuthenticated } = require('../config/auth');
@@ -36,6 +37,20 @@ function validateForm(data) {
 
 // router.use(ensureAuthenticated);
 
+// Dashboard
+router.get('/dashboard', ensureAuthenticated, function(req, res, next) {
+    User.findByPk(req.user.id, { include: ['products'] })
+        .then(user => {
+            res.render('products', {
+                products: user.get().products,
+                user: req.user
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
 // Generate random data to database
 router.get('/generate', ensureAuthenticated, function(req, res, next) {
     for (let i = 0; i < 10; i++) {
@@ -45,7 +60,8 @@ router.get('/generate', ensureAuthenticated, function(req, res, next) {
             price: `$${faker.commerce.price()}`,
             description: faker.lorem.sentences(),
             contact_email: faker.internet.email(),
-            cover: faker.image.image()
+            cover: faker.image.image(),
+            userId: req.user.id
         }).catch(err => console.log(err));
     }
     res.redirect('/products/pages/1');
@@ -54,8 +70,9 @@ router.get('/generate', ensureAuthenticated, function(req, res, next) {
 // Remove all data
 router.get('/clean', ensureAuthenticated, function(req, res, next) {
     Product.destroy({
-        where: {},
-        truncate: true /* this will ignore where and truncate the table instead */
+        where: {
+            userId: req.user.id
+        }
     })
         .then(res.redirect('/products/pages/1'))
         .catch(err => console.log(err));
@@ -109,6 +126,7 @@ router.get('/add', ensureAuthenticated, (req, res) =>
 
 // Create single product
 router.post('/add', ensureAuthenticated, (req, res) => {
+    let userId = req.user.id;
     let {
         product_name,
         category,
@@ -139,7 +157,8 @@ router.post('/add', ensureAuthenticated, (req, res) => {
             price,
             description,
             contact_email,
-            cover
+            cover,
+            userId
         })
             .then(product => res.redirect('/products'))
             .catch(err => console.log(err));
@@ -149,12 +168,21 @@ router.post('/add', ensureAuthenticated, (req, res) => {
 // Read single products
 router.get('/:id', (req, res) => {
     const { id } = req.params;
-    Product.findByPk(id).then(product => {
-        res.render('product', {
-            product,
-            user: req.user
+
+    User.findOne({
+        where: {},
+        include: [{ model: Product, where: { id: id } }]
+    })
+        .then(user => {
+            res.render('product', {
+                product: user.products[0],
+                productUser: user,
+                user: req.user
+            });
+        })
+        .catch(err => {
+            console.log(err);
         });
-    });
 });
 
 // Update single product

@@ -12,9 +12,9 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/products/{{id}}" class="view-btn">View</a></button>
-                                        {{#if ../user.email}}
+                                        {{#ifequal ../user.id userId }}
                                             <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/products/{{id}}/edit" class="view-btn">Edit</a></button>
-                                        {{/if}}
+                                        {{/ifequal}}
                                     </div>
                                     <small class="text-muted">{{price}}</small>
                                 </div>

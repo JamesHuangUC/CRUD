@@ -1,19 +1,19 @@
 <div class="container">
-    {{#if product}}
+    {{#with product}}
         <div class="single_product">
-            <h3>{{product.product_name}}</h3>
-            <img src="{{product.cover}}" class="img-thumbnail rounded mx-auto d-block" alt="...">
-            <p class="lead">{{product.description}}</p>
-            <p>Category: {{product.category}}</p>
-            <p>Price: {{product.price}} <a href="mailto: {{product.contact_email}}" class="btn btn-primary buy-btn">Contact to Buy</a></p>
-            {{#if user.email}}
-                <form action="/products/{{product.id}}?_method=DELETE" method="POST">
-                    <a href="/products/{{product.id}}/edit" class="btn btn-warning">Edit</a>
+            <h3>{{product_name}}</h3>
+            <img src="{{cover}}" class="img-thumbnail rounded mx-auto d-block" alt="...">
+            <p class="lead">{{description}}</p>
+            <p>Category: {{category}}</p>
+            <p>Price: {{price}} <a href="mailto: {{contact_email}}" class="btn btn-primary buy-btn">Contact {{../productUser.name}}</a></p>
+            {{#ifequal ../user.id ../productUser.id}}
+                <form action="/products/{{id}}?_method=DELETE" method="POST">
+                    <a href="/products/{{id}}/edit" class="btn btn-warning">Edit</a>
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
-            {{/if}}
+            {{/ifequal}}
         </div>
     {{else}}
         <p>No products available</p>
-    {{/if}}
+    {{/with}}
 </div>
