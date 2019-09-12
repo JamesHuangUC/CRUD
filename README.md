@@ -24,4 +24,4 @@ docker-compose up -d # Start the app with one command.
 
 # Demo
 
-[https://restful-crud-app.herokuapp.com](https://restful-crud-app.herokuapp.com)
+[https://restful-crud.herokuapp.com](https://restful-crud.herokuapp.com)
