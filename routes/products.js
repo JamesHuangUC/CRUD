@@ -4,6 +4,9 @@ const router = express.Router();
 const db = require('../config/database.js');
 const Product = require('../models/Product.js');
 const Sequelize = require('sequelize');
+
+const { ensureAuthenticated } = require('../config/auth');
+
 const Op = Sequelize.Op;
 
 function validateForm(data) {
@@ -31,8 +34,10 @@ function validateForm(data) {
     return errors;
 }
 
+// router.use(ensureAuthenticated);
+
 // Generate random data to database
-router.get('/generate', function(req, res, next) {
+router.get('/generate', ensureAuthenticated, function(req, res, next) {
     for (let i = 0; i < 10; i++) {
         Product.create({
             product_name: faker.commerce.productName(),
@@ -47,7 +52,7 @@ router.get('/generate', function(req, res, next) {
 });
 
 // Remove all data
-router.get('/clean', function(req, res, next) {
+router.get('/clean', ensureAuthenticated, function(req, res, next) {
     Product.destroy({
         where: {},
         truncate: true /* this will ignore where and truncate the table instead */
@@ -70,18 +75,20 @@ router.get('/pages/:page', (req, res) => {
             res.render('products', {
                 products: result.rows,
                 current: page,
-                pages: Math.ceil(result.count / perPage)
+                pages: Math.ceil(result.count / perPage),
+                user: req.user
             });
         })
         .catch(err => console.log(err));
 });
 
 // Display edit product form
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', ensureAuthenticated, (req, res) => {
     const { id } = req.params;
     Product.findByPk(id).then(product => {
         res.render('edit', {
-            product
+            product,
+            user: req.user
         });
     });
 });
@@ -91,15 +98,17 @@ router.get('/search', (req, res) => {
     let { term } = req.query;
     term = term.toLowerCase();
     Product.findAll({ where: { category: { [Op.like]: '%' + term + '%' } } })
-        .then(products => res.render('products', { products }))
+        .then(products => res.render('products', { products, user: req.user }))
         .catch(err => console.log(err));
 });
 
 // Display add product form
-router.get('/add', (req, res) => res.render('add'));
+router.get('/add', ensureAuthenticated, (req, res) =>
+    res.render('add', { user: req.user })
+);
 
 // Create single product
-router.post('/add', (req, res) => {
+router.post('/add', ensureAuthenticated, (req, res) => {
     let {
         product_name,
         category,
@@ -142,13 +151,14 @@ router.get('/:id', (req, res) => {
     const { id } = req.params;
     Product.findByPk(id).then(product => {
         res.render('product', {
-            product
+            product,
+            user: req.user
         });
     });
 });
 
 // Update single product
-router.put('/:id', (req, res) => {
+router.put('/:id', ensureAuthenticated, (req, res) => {
     const { id } = req.params;
     let {
         product_name,
@@ -196,7 +206,7 @@ router.put('/:id', (req, res) => {
 });
 
 // Delete single products
-router.delete('/:id', (req, res) => {
+router.delete('/:id', ensureAuthenticated, (req, res) => {
     const { id } = req.params;
     Product.destroy({
         where: { id }

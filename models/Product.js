@@ -22,8 +22,8 @@ const Product = db.define('products', {
     }
 });
 
-db.sync({ force: true }).then(() => {
-    console.log(`Database and tables created.`);
-});
+// db.sync({ force: true }).then(() => {
+//     console.log(`Database and tables created.`);
+// });
 
 module.exports = Product;

@@ -3,9 +3,17 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
 const methodOverride = require('method-override');
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('passport');
+
+const PORT = process.env.PORT || 3000;
 
 // Connect db
 const db = require('./config/database.js');
+
+// // Passport Config
+require('./config/passport')(passport);
 
 // Test db
 db
@@ -13,9 +21,35 @@ db
     .then(() => console.log('DB connected'))
     .catch(err => console.log('Error: ' + err));
 
-// Start server
+// Create server
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+// Express body parser
+app.use(express.urlencoded({ extended: true }));
+
+// Express session
+app.use(
+    session({
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true
+    })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Connect flash
+app.use(flash());
+
+// Global variables
+app.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 
 // Handlebars
 const hbs = exphbs.create({
@@ -53,8 +87,8 @@ const hbs = exphbs.create({
 app.engine('handlebars', exphbs(hbs));
 app.set('view engine', 'handlebars');
 
-// body parser
-app.use(bodyParser.urlencoded({ extended: false }));
+// // body parser
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // Method override
 app.use(methodOverride('_method'));
@@ -63,7 +97,11 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Landing page
-app.get('/', (req, res) => res.render('products', { layout: 'main' }));
+// app.get('/', (req, res) => res.render('products', { layout: 'main' }));
+
+// Routes
+app.use('/', require('./routes/index.js'));
+app.use('/users', require('./routes/users.js'));
 
 // Product routes
 app.use('/products', require('./routes/products.js'));
