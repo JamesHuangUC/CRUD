@@ -2,7 +2,7 @@
 
 Designed a REST API which supports CRUD (Create, Read, Update, Delete) operations and user authentication.
 
-I also created a Ruby on Rails version of this [application](https://github.com/JamesHuangUC/Ruby-on-Rails-CRUD).
+I also created a [Ruby on Rails version of this application](https://github.com/JamesHuangUC/Ruby-on-Rails-CRUD).
 
 ![Database Diagram](./dbDiagram.png)
 
