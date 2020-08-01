@@ -1,6 +1,6 @@
 # CRUD
 
-Designed a REST API which supports CRUD (Create, Read, Update, Delete) operations and user authentication.
+Designed a Node.js web application that uses RESTful web services and supports CRUD (Create, Read, Update, Delete) operations, user authentication and authorization.
 
 I also created a [Ruby on Rails version of this application](https://github.com/JamesHuangUC/Ruby-on-Rails-CRUD).
 
